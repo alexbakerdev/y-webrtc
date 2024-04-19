@@ -13,7 +13,7 @@ import * as math from 'lib0/math'
 import { createMutex } from 'lib0/mutex'
 
 import * as Y from 'yjs' // eslint-disable-line
-import Peer from 'simple-peer/simplepeer.min.js'
+import Peer from './SimplePeerExtended'
 
 import * as syncProtocol from 'y-protocols/sync'
 import * as awarenessProtocol from 'y-protocols/awareness'
@@ -506,12 +506,12 @@ export class SignalingConn extends ws.WebsocketClient {
             const emitPeerChange = webrtcConns.has(data.from)
               ? () => {}
               : () =>
-                room.provider.emit('peers', [{
-                  removed: [],
-                  added: [data.from],
-                  webrtcPeers: Array.from(room.webrtcConns.keys()),
-                  bcPeers: Array.from(room.bcConns)
-                }])
+                  room.provider.emit('peers', [{
+                    removed: [],
+                    added: [data.from],
+                    webrtcPeers: Array.from(room.webrtcConns.keys()),
+                    bcPeers: Array.from(room.bcConns)
+                  }])
             switch (data.type) {
               case 'announce':
                 if (webrtcConns.size < room.provider.maxConns) {
